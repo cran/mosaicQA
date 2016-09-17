@@ -1,0 +1,8 @@
+exportPattern("^[[:alpha:]]+")
+import(gplots)
+import(psych)
+import(grid)
+importFrom("grDevices", "dev.off", "grey", "pdf")
+importFrom("graphics", "barplot", "boxplot", "hist", "legend", "lines","par", "title")
+importFrom("stats", "density", "qqline", "qqnorm", "sd")
+importFrom("utils", "read.csv")

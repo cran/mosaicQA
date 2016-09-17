@@ -1,0 +1,14 @@
+Package: mosaicQA
+Type: Package
+Title: MOSAIC - Basic Quality Data Assurance for Epidemiologic Research
+Version: 1.0.1
+Date: 2016-09-09
+Author: Martin Bialke <mosaic@uni-greifswald.de>, Thea Schwaneberg <thea.schwaneberg@uni-greifswald.de>, Rene Walk <rene.walk@uni-greifswald.de>
+Maintainer: Martin Bialke <mosaic@uni-greifswald.de>
+Description: With the provision of several tools and templates the MOSAIC project (DFG-Grant Number HO 1937/2-1) supports the implementation of a central data management in epidemiological research projects. The 'mosaicQA' package enables epidemiologists with none or low experience in R to generate basic data quality reports for a wide range of application scenarios. See <https://mosaic-greifswald.de/> for more information.
+License: AGPL-3
+Depends: psych, gplots, grid
+NeedsCompilation: no
+Packaged: 2016-09-17 05:49:42 UTC; bialkem
+Repository: CRAN
+Date/Publication: 2016-09-17 08:16:04
