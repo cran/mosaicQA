@@ -1,13 +1,13 @@
-\name{mosaic.createSimplePdfmetric}
-\alias{mosaic.createSimplePdfmetric}
+\name{mosaic.createSimplePdfMetric}
+\alias{mosaic.createSimplePdfMetric}
 \title{
-createSimplePdfmetric
+createSimplePdfMetric
 }
 \description{
 Create simple PDF-file for metric data
 }
 \usage{
-mosaic.createSimplePdfmetric(inputfile, outputfolder)
+mosaic.createSimplePdfMetric(inputfile, outputfolder)
 }
 
 \arguments{
@@ -47,7 +47,7 @@ mosaic.setGlobalUnit('(cm)')
 mosaic.setGlobalDescription('Height')
 
 #create PDF-report, uncomment to start report-generation
-#mosaic.createSimplePdfmetric(metric_datafile, outputFolder)
+#mosaic.createSimplePdfMetric(metric_datafile, outputFolder)
 }
 \keyword{ pdf }
 \keyword{ generate }

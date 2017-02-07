@@ -18,8 +18,8 @@
 #   For more information visit mosaic-greifswald.de or mail to mosaic@uni-greifswald.de
 
 #   Author(s):  Martin Bialke, Thea Schwaneberg, Rene Walk
-#   Date:       09. Sept. 2016
-#   Version:    1.0.1
+#   Date:       07. Feb. 2017
+#   Version:    1.2.0
 #
 
 #internal environment
@@ -113,7 +113,7 @@ mosaic.preProcessMetricData = function(data){
 
 
 ###### identify unique values in data column, get abs, perc and cum stats
-mosaic.preProcessCategorialData=function(data){
+mosaic.preProcessCategoricalData=function(data){
   num_of_columns=dim(data)[2]
   num_of_rows=dim(data)[1]
 
@@ -186,22 +186,50 @@ mosaic.generateMetricTablePlot = function(data, num_of_columns,index, varname){
   # process previuously added columns containing "valid value markers"
   # calculate ratio of vaild values and misssings
 
-
-
-  t=table(data[,num_of_columns+index])
-  p=round(prop.table(table(data[,num_of_columns+index]))*100,2)
-  t_kum=cumsum(t)
-  p_kum=round(cumsum(p),2)
-  tabelle1=cbind(t,p,t_kum,p_kum)
-
+  num_of_rows=dim(data)[1]
+  
+  # process previuously added columns containing "valid value markers"
+  # calculate ratio of vaild values and misssings
+  
+  #matrix to save occurences of missings and valid values
+  results=matrix(NA,2,4)#abs,perc,abs_kum,perz_kum
+  
+  percent_cum=0
+  abs_cum=0
+    
+  for (rowindex in 1:2){
+    percent_cum=0
+    abs_cum=0    
+	
+	#absolut
+    count_valids=sum(data[,num_of_columns+index])    
+    if(length(count_valids)>0){
+      results[1,1]=count_valids
+      results[2,1]=num_of_rows-count_valids
+    } else {
+      results[1,1]=0
+      results[2,1]=num_of_rows
+    }
+    
+	#percent
+    results[rowindex,2]=round(results[rowindex,1]*100/num_of_rows,2)
+    
+	#abs_cum
+    abs_cum=abs_cum+results[rowindex,1]
+    results[rowindex,3]=abs_cum
+    
+	#per_cum
+    percent_cum=round(percent_cum+results[rowindex,2],2)
+    results[rowindex,4]=percent_cum
+  }
   # set header for temporary result table
-
+  tabelle1= as.data.frame(cbind(results))
   colnames(tabelle1)[1]<-paste(mosaicQA.env$labelCounts)
   colnames(tabelle1)[2]<-paste("Percentage")
   colnames(tabelle1)[3]<-paste("Frequency (cum.)")
   colnames(tabelle1)[4]<-paste("Percentage (cum.)")
-  rownames(tabelle1)[1]<-paste("Missings")
-  rownames(tabelle1)[2]<-paste("Valid Values")
+  rownames(tabelle1)[2]<-paste("Missings")
+  rownames(tabelle1)[1]<-paste("Valid Values")
 
   # plot result table
   textplot( tabelle1, valign="top"  )
@@ -319,7 +347,7 @@ mosaic.finishPlot= function(){
 
 
 
-###### set and parse a global codelist for categorial data
+###### set and parse a global codelist for Categorical data
 
 mosaic.setGlobalCodelist = function(coding){
   mosaicQA.env$codelist=matrix(coding)
@@ -346,9 +374,9 @@ mosaic.setGlobalCodelist = function(coding){
 }
 
 
-###### create plots for categorial data
+###### create plots for Categorical data
 
-mosaic.generateCategorialPlot= function(dataframe, varname){
+mosaic.generateCategoricalPlot= function(dataframe, varname){
 
   barLabel = paste(mosaicQA.env$label_normalverteilung, mosaicQA.env$labelCounts, varname, sep=" ")
 
@@ -367,9 +395,9 @@ mosaic.generateCategorialPlot= function(dataframe, varname){
 }
 
 
-###### create simple pdf file for categorial data
+###### create simple pdf file for Categorical data
 ###### (combines the above functionality)
-mosaic.createSimplePdfcategorial = function(inputfile, outputfolder){
+mosaic.createSimplePdfCategorical = function(inputfile, outputfolder){
 
   # load csv with n columns to data-variable
   data = mosaic.loadCsvData(inputfile)
@@ -382,7 +410,7 @@ mosaic.createSimplePdfcategorial = function(inputfile, outputfolder){
     varname=names(data)[column_index]
 
     #calc abs, % and cums for selected column
-    data_preprocessed = mosaic.preProcessCategorialData(data[column_index])
+    data_preprocessed = mosaic.preProcessCategoricalData(data[column_index])
 
     #create PDF file with varname suffix
 
@@ -392,8 +420,38 @@ mosaic.createSimplePdfcategorial = function(inputfile, outputfolder){
     par(mfrow=c(1,2))
 
     #generate missings-table based on results of preprocessing
-    mosaic.generateCategorialPlot(data_preprocessed,varname)
+    mosaic.generateCategoricalPlot(data_preprocessed,varname)
 
+    mosaic.finishPlot()
+  }
+}
+
+###### create simple pdf file for categorial dataframe 
+###### (combines the above functionality)
+mosaic.createSimplePdfCategoricalDataframe = function(df, outputfolder){
+    
+  data = as.data.frame(df)
+  num_of_columns=dim(data)[2]
+  
+  
+  # create PDF Files  with missings statistics, histogram, boxplot and qqnorm  for each variable /column
+  for (column_index in 1:num_of_columns){
+    #use selected  column header as varname
+    varname=names(data)[column_index]
+    
+    #calc abs, % and cums for selected column
+    data_preprocessed = mosaic.preProcessCategoricalData(data[column_index])
+    
+    #create PDF file with varname suffix
+    
+    mosaic.beginPlot(varname,outputfolder)
+    
+    #divide pdf page, 2 rows, 1 column
+    par(mfrow=c(1,2))
+    
+    #generate missings-table based on results of preprocessing
+    mosaic.generateCategoricalPlot(data_preprocessed,varname)
+    
     mosaic.finishPlot()
   }
 }
@@ -401,7 +459,7 @@ mosaic.createSimplePdfcategorial = function(inputfile, outputfolder){
 
 ###### create simple pdf file for metric data
 ###### (combines the above functionality)
-mosaic.createSimplePdfmetric = function(inputfile, outputfolder){
+mosaic.createSimplePdfMetric = function(inputfile, outputfolder){
 
     # load csv with n columns to data-variable
     metric_data = mosaic.loadCsvData(inputfile)
@@ -427,6 +485,35 @@ mosaic.createSimplePdfmetric = function(inputfile, outputfolder){
       mosaic.finishPlot()
     }
 }
+
+###### create simple pdf file for metric data frame
+###### (combines the above functionality)
+mosaic.createSimplePdfMetricDataframe = function(df, outputfolder){
+    
+  metric_data = as.data.frame(df)
+  
+  num_of_columns=dim(metric_data)[2]
+  
+  # preprocess data to calculate ratio of valid values and missings
+  data_preprocessed=mosaic.preProcessMetricData(metric_data)
+  
+  # create PDF Files  with missings statistics, histogram, boxplot and qqnorm  for each variable /column
+  for (column_index in 1:num_of_columns){
+    #use column header as varname
+    varname=colnames(data_preprocessed)[column_index]
+    
+    #create PDF file with varname suffix
+    mosaic.beginPlot(varname,outputfolder)
+    
+    #generate missings-table based on results of preprocessing
+    mosaic.generateMetricTablePlot(data_preprocessed,num_of_columns,column_index,varname)
+    
+    # generate graphics
+    mosaic.generateMetricPlots(data_preprocessed, varname)  
+    mosaic.finishPlot()  
+  }  
+}
+
 
 ##### get formatted timestamp
 mosaic.getTimestamp = function(){

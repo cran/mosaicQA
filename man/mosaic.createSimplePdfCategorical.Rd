@@ -1,14 +1,14 @@
-\name{mosaic.createSimplePdfcategorial}
-\alias{mosaic.createSimplePdfcategorial}
+\name{mosaic.createSimplePdfCategorical}
+\alias{mosaic.createSimplePdfCategorical}
 
 \title{
-createSimplePdfcategorial
+createSimplePdfCategorical
 }
 \description{
 Create simple PDF-file for categorical data 
 }
 \usage{
-mosaic.createSimplePdfcategorial(inputfile, outputfolder)
+mosaic.createSimplePdfCategorical(inputfile, outputfolder)
 }
 
 \arguments{
@@ -49,7 +49,7 @@ mosaic.setGlobalCodelist(c('1=yes','2=no','99996=not specified','99997=not acqui
 
 # create simple pdf file foreach variable column in categorial data file, uncomment to start 
 # report-generation
-# mosaic.createSimplePdfcategorial(categorial_datafile,outputFolder)
+# mosaic.createSimplePdfCategorical(categorial_datafile,outputFolder)
 }
 
 \keyword{ categorical }

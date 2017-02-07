@@ -1,14 +1,14 @@
-\name{mosaic.preProcessCategorialData}
-\alias{mosaic.preProcessCategorialData}
+\name{mosaic.preProcessCategoricalData}
+\alias{mosaic.preProcessCategoricalData}
 
 \title{
-preProcessCategorialData
+preProcessCategoricalData
 }
 \description{
 Identify unique values in data column, get absolute, percentage and cumulative statistics
 }
 \usage{
-mosaic.preProcessCategorialData(data)
+mosaic.preProcessCategoricalData(data)
 }
 
 \arguments{

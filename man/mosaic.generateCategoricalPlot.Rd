@@ -1,14 +1,14 @@
-\name{mosaic.generateCategorialPlot}
-\alias{mosaic.generateCategorialPlot}
+\name{mosaic.generateCategoricalPlot}
+\alias{mosaic.generateCategoricalPlot}
 
 \title{
-generateCategorialPlot
+generateCategoricalPlot
 }
 \description{
 Generate Statistics and Create plots for categorical data
 }
 \usage{
-mosaic.generateCategorialPlot(dataframe, varname)
+mosaic.generateCategoricalPlot(dataframe, varname)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
